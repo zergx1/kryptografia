@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 
 import layout.MainWindow;
+import model.RSA;
 
 public class Controller extends AbstractAction implements ActionListener {
 
@@ -40,6 +41,12 @@ public class Controller extends AbstractAction implements ActionListener {
 			}
 			if (window.getMethod() == 3) {
 				// RSA
+				RSA blind=new RSA();
+				
+				if(window.getKey1().isEmpty())
+				{
+					window.setKey1(blind.generateN().toString());
+				}
 				if (window.getFileOrWindow() == 1) {
 					// File
 					String fileName = window.getFileName();
