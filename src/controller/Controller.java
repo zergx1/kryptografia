@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.math.BigInteger;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 
 import layout.MainWindow;
 import model.Rsa;
@@ -43,25 +44,28 @@ public class Controller extends AbstractAction implements ActionListener {
 			if (window.getMethod() == 3) {
 				// RSA
 				Rsa blind=new Rsa();
-				blind.generate_rsa();
-				if(window.getKey1().isEmpty())
+				
+				if(window.getKey1().isEmpty() && window.getKey2().isEmpty() && window.getKey3().isEmpty())
 				{
-					window.setKey1(blind.getN().toString());					
-				}
-				else
-					blind.setN(new BigInteger(window.getKey1()));
-				if(window.getKey2().isEmpty())
-				{
+					blind.generate_rsa();
+					window.setKey1(blind.getN().toString());
 					window.setKey2(blind.getE().toString());
+					window.setKey3(blind.getD().toString());					
 				}
 				else
-					blind.setE(new BigInteger(window.getKey2()));
-				if(window.getKey3().isEmpty())
-				{
-					window.setKey3(blind.getD().toString());
-				}
-				else
-					blind.setE(new BigInteger(window.getKey3()));
+					{
+					if(window.getKey1().isEmpty() || window.getKey2().isEmpty() || window.getKey3().isEmpty())
+						JOptionPane.showMessageDialog(window,
+							    "Brakuje klucza",
+							    "Blad",
+							    JOptionPane.ERROR_MESSAGE);
+					else
+					{
+						blind.setN(new BigInteger(window.getKey1()));
+						blind.setE(new BigInteger(window.getKey2()));
+						blind.setD(new BigInteger(window.getKey3()));
+					}
+
 				
 				if (window.getFileOrWindow() == 1) {
 					// File
@@ -102,6 +106,7 @@ public class Controller extends AbstractAction implements ActionListener {
 
 			}
 		}
+			}
 	}
 
 	public Controller() {
