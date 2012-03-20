@@ -275,6 +275,10 @@ public class MainWindow extends JFrame {
 	public void setInput(String in) {
 		textArea.setText(in);
 	}
+	public void setInput2(String in) {
+		if(textArea.getText().isEmpty())textArea.setText(in);
+		textArea.setText(textArea.getText()+"\n"+in);
+	}
 
 	public String getOutput() {
 		return textArea_1.getText();

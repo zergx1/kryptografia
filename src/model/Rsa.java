@@ -30,30 +30,30 @@ public class Rsa {
   public static void main(String[] unused) {
     Random prng = new SecureRandom();  // self-seeding
     Rsa rsa = new Rsa();
-    //Public Key (N, E) = (2951147, 13)
-    //Private Key (N, D) = (2951147, 1133677)
-    
-    rsa.n = new BigInteger("3233");
-    rsa.e =  new BigInteger("17");
-    rsa.d =  new BigInteger("2753");
-    
-    String test = "KKKk";
-    BigInteger text;
-    System.out.println(test);
-    
-	text = new BigInteger( test.getBytes() );
-	//text = new BigInteger("493");
-	System.out.println("Bytes:"+text);
-	
-    StringFunctions h = new StringFunctions();
-    //h.splitAscii(rsa.n, text);
-	
-	String encoded = rsa.encrypt( text ); 
-    System.out.println("Encoded: "+encoded);
-
-    
-    String decoded = rsa.decrypt(new BigInteger(encoded));
-    System.out.println("Decoded: "+decoded);
+//    //Public Key (N, E) = (2951147, 13)
+//    //Private Key (N, D) = (2951147, 1133677)
+//    
+//    rsa.n = new BigInteger("3233");
+//    rsa.e =  new BigInteger("17");
+//    rsa.d =  new BigInteger("2753");
+//    
+//    String test = "KKKk";
+//    BigInteger text;
+//    System.out.println(test);
+//    
+//	text = new BigInteger( test.getBytes() );
+//	//text = new BigInteger("493");
+//	System.out.println("Bytes:"+text);
+//	
+//    StringFunctions h = new StringFunctions();
+//    h.splitAscii(rsa.n, text.toString());
+//	
+//	String encoded = rsa.encrypt( text ); 
+//    System.out.println("Encoded: "+encoded);
+//
+//    
+//    String decoded = rsa.decrypt(new BigInteger(encoded));
+//    System.out.println("Decoded: "+decoded);
     
 
     
@@ -69,9 +69,15 @@ public class Rsa {
     System.out.println(decrypted);*/
 	//System.out.println(rsa.encrypt(new BigInteger("910")));
 
+    String test = "Xfdsddasdasdasdasda89765458790087965465rtgyhbnjuy7utfgvbhysdgdfgddgd";
+    BigInteger raw;
+	raw =  new BigInteger( test.getBytes() );
+	System.out.println(raw);
+    
     
     
     rsa.generate_rsa();
+    rsa.generate_blind_signature(new BigInteger("7575757575"));
     //System.out.println(rsa.n);
     }
   
@@ -142,30 +148,31 @@ public void convertByteArrayToString(BigInteger msg) {
       return new String( msg.modPow(this.e, this.n).toString() ); // text ^ e mod n
   }
   
-  
   public String decrypt(BigInteger msg) {
       return new String(msg.modPow(this.d, this.n).toString() );
   }
 
-     public void generate_blind_signature(BigInteger msg)
+ public void generate_blind_signature(BigInteger msg)
      {
-      BigInteger blind;
+	 MathFunctions mat=new MathFunctions();
+	 this.r=mat.relativelyPrimeNumbers(n);
+      BigInteger blind;	//m' -zaciemnienie
       //BLIND
-      blind = ((this.r.modPow(this.e,this.n)).multiply(msg)).mod(this.n);
+      blind = ((this.r.modPow(this.e,this.n)).multiply(msg)).mod(n);
       //SIGNAtURE
-      BigInteger signature = blind.modPow(d,n);
+      BigInteger signature = blind.modPow(d,n);	//s' -podpis
       //UNBLIND
          BigInteger unblinded = this.r.modInverse(n).multiply(signature).mod(n);
          //SIGNATURE OF MSG
          BigInteger sig_of_m = msg.modPow(this.d,this.n);
-         System.out.println("signature_of_m = " + sig_of_m);
+         //System.out.println("signature_of_m = " + sig_of_m);
          
          //check that unblinded is equal to a signature of m:
-         System.out.println(unblinded.equals(sig_of_m));
+         //System.out.println(unblinded.equals(sig_of_m));
          
          //try to verify using the RSA formula
          BigInteger check = unblinded.modPow(this.e,this.n);
-         System.out.println(msg.equals(check));
+         //System.out.println(msg.equals(check));
       
      }
 

@@ -2,6 +2,10 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 
 import javax.swing.AbstractAction;
@@ -70,8 +74,34 @@ public class Controller extends AbstractAction implements ActionListener {
 				if (window.getFileOrWindow() == 1) {
 					// File
 					String fileName = window.getFileName();
+					// czytanie pliku
+					FileReader fr;
+					try {
+						fr = new FileReader(fileName);
+						BufferedReader br = new BufferedReader(fr);
+						String s;
+					
+						while((s = br.readLine()) != null)
+						{
+						window.setInput2(s);
+						}
+						fr.close();
+						
+						//Kodowanie
+						
+						
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			
 				} else {
 					// Window
+					
+					//Kodowanie
 				}
 
 			}

@@ -1,5 +1,6 @@
 package extra;
 
+import java.math.BigInteger;
 import java.util.Vector;
 
 public class StringFunctions {
@@ -18,7 +19,7 @@ public class StringFunctions {
 	     return result;
 	}
 
-	public Vector splitAscii(int split, String msg)
+	public Vector splitAscii(BigInteger split, String msg)
 	{
 		int j;
 		msg=this.return_ascii(msg);
@@ -27,7 +28,7 @@ public class StringFunctions {
 		{
 			j=i+1;
 			//System.out.println("i= "+i);
-			while(Integer.valueOf(msg.substring(i, j))<split)
+			while(BigInteger.valueOf(Long.valueOf(msg.substring(i, j))).compareTo(split)==-1)
 			{
 				//System.out.println("j= "+j);
 				if(j+1>msg.length())
