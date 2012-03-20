@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 
 import layout.MainWindow;
-import model.RSA;
+import model.Rsa;
 
 public class Controller extends AbstractAction implements ActionListener {
 
@@ -41,7 +41,7 @@ public class Controller extends AbstractAction implements ActionListener {
 			}
 			if (window.getMethod() == 3) {
 				// RSA
-				RSA blind=new RSA();
+				Rsa blind=new Rsa();
 				
 				if(window.getKey1().isEmpty())
 				{

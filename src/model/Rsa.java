@@ -10,7 +10,7 @@ import extra.StringFunctions;
 /*
 
  */
-public class RsaClass {
+public class Rsa {
 	// KLUCZ PUBLICZNY DEFINIOWANY JEST JAKO PARA LICZB (n, e)
 	// KLUCZ PRYWATNY DEFINIOWANY JEST JAKO PARA LICZB (n, d)
 	private int bitlen = 1024;
@@ -26,7 +26,7 @@ public class RsaClass {
 	
   public static void main(String[] unused) {
     Random prng = new SecureRandom();  // self-seeding
-    RsaClass rsa = new RsaClass();
+    Rsa rsa = new Rsa();
     //Public Key (N, E) = (2951147, 13)
     //Private Key (N, D) = (2951147, 1133677)
     
@@ -71,7 +71,12 @@ public class RsaClass {
     //rsa.generate_rsa();
     //System.out.println(rsa.n);
     }
-  
+  public BigInteger generateN()
+  {
+  	this.n=BigInteger.valueOf(1515);
+  	System.out.println("Generuje klucz");
+  	return n;
+  }
   public void convertByteArrayToString(BigInteger msg) {
 	  
       
