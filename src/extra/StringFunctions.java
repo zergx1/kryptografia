@@ -5,24 +5,23 @@ import java.util.Vector;
 
 public class StringFunctions {
 
-	public String return_ascii (String msg)
+	public BigInteger returnByte (String msg)
 	{
-		char c;
-		int j;
-		String result="";
-	     for ( int i = 0; i < msg.length(); ++i ) {
-		       c = msg.charAt( i );
-		       j = (int) c;
-		       //System.out.print(j);
-		       result+=j;
-		       }
+		BigInteger result;
+		result=new BigInteger(msg.getBytes());
 	     return result;
+	}
+	public String returnByteString (String msg)
+	{
+		BigInteger result;
+		result=new BigInteger(msg.getBytes());
+	     return result.toString();
 	}
 
 	public Vector splitAscii(BigInteger split, String msg)
 	{
 		int j;
-		msg=this.return_ascii(msg);
+		msg=this.returnByteString(msg);
 		Vector blocks=new Vector();
 		for(int i=0;i<msg.length();)
 		{
@@ -55,7 +54,7 @@ public class StringFunctions {
 	public Vector splitAsciiTo(int split,String msg)
 	{
 		Vector blocks=new Vector();
-		String ascii=this.return_ascii(msg);
+		String ascii=this.returnByteString(msg);
 		int i=0;
 		System.out.println();
 		while(true)
