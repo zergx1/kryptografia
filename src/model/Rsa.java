@@ -23,6 +23,7 @@ public class Rsa {
 	private BigInteger d; // odwrotnosc e mod eul
 	private BigInteger eul; //  eulera(n)
 	private BigInteger e;
+	private BigInteger r;
 	
 
 	
@@ -146,7 +147,27 @@ public void convertByteArrayToString(BigInteger msg) {
       return new String(msg.modPow(this.d, this.n).toString() );
   }
 
-
+     public void generate_blind_signature(BigInteger msg)
+     {
+      BigInteger blind;
+      //BLIND
+      blind = ((this.r.modPow(this.e,this.n)).multiply(msg)).mod(this.n);
+      //SIGNAtURE
+      BigInteger signature = blind.modPow(d,n);
+      //UNBLIND
+         BigInteger unblinded = this.r.modInverse(n).multiply(signature).mod(n);
+         //SIGNATURE OF MSG
+         BigInteger sig_of_m = msg.modPow(this.d,this.n);
+         System.out.println("signature_of_m = " + sig_of_m);
+         
+         //check that unblinded is equal to a signature of m:
+         System.out.println(unblinded.equals(sig_of_m));
+         
+         //try to verify using the RSA formula
+         BigInteger check = unblinded.modPow(this.e,this.n);
+         System.out.println(msg.equals(check));
+      
+     }
 
   
   
