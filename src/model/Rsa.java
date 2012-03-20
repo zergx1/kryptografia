@@ -2,6 +2,8 @@ package model;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -113,22 +115,14 @@ public void convertByteArrayToString(BigInteger msg) {
 
 	  this.n = q.multiply(p); // n = p*q
 	  
-	  
 	  MathFunctions mat=new MathFunctions();
-	  this.eul=mat.eulerFunction(p, q);
-	  //System.out.println(eul);
-	  
+	  this.eul=mat.eulerFunction(p, q);  
 	  
 	  this.p=BigInteger.ZERO;
 	  this.q=BigInteger.ZERO;
-	  this.e=new BigInteger("65537");     // common value in practice = 2^16 + 1
-//	  while(!e.gcd(eul).equals(BigInteger.ONE))
-//	  this.e=mat.relativelyPrimeNumbers(eul);
-	  //System.out.println(e);
-
+	  this.e=mat.relativelyPrimeNumbers(eul);    // common value in practice = 2^16 + 1
 	  this.d = e.modInverse(eul);
-	  //System.out.println(d);
-	  //System.out.println("koniec");
+
   }
   
   
