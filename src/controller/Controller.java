@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
 
 import javax.swing.AbstractAction;
 
@@ -42,11 +43,26 @@ public class Controller extends AbstractAction implements ActionListener {
 			if (window.getMethod() == 3) {
 				// RSA
 				Rsa blind=new Rsa();
-				
+				blind.generate_rsa();
 				if(window.getKey1().isEmpty())
 				{
-					window.setKey1(blind.generateN().toString());
+					window.setKey1(blind.getN().toString());					
 				}
+				else
+					blind.setN(new BigInteger(window.getKey1()));
+				if(window.getKey2().isEmpty())
+				{
+					window.setKey2(blind.getE().toString());
+				}
+				else
+					blind.setE(new BigInteger(window.getKey2()));
+				if(window.getKey3().isEmpty())
+				{
+					window.setKey3(blind.getD().toString());
+				}
+				else
+					blind.setE(new BigInteger(window.getKey3()));
+				
 				if (window.getFileOrWindow() == 1) {
 					// File
 					String fileName = window.getFileName();

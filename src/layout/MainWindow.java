@@ -20,6 +20,10 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
 
@@ -143,6 +147,7 @@ public class MainWindow extends JFrame {
 		buttonGroup.add(rdbtnKnapsack);
 
 		JRadioButton rdbtnThird = new JRadioButton("RSA");
+
 		rdbtnThird.setActionCommand("C");
 		rdbtnThird.setBounds(6, 95, 109, 23);
 		panel_3.add(rdbtnThird);

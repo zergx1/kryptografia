@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import extra.MathFunctions;
 import extra.StringFunctions;
 
 /*
@@ -14,7 +15,6 @@ public class Rsa {
 	// KLUCZ PUBLICZNY DEFINIOWANY JEST JAKO PARA LICZB (n, e)
 	// KLUCZ PRYWATNY DEFINIOWANY JEST JAKO PARA LICZB (n, d)
 	private int bitlen = 1024;
-	private int iterator = 3; // o ile dzielona jest wiadomosc
 	private BigInteger n; // n=p*q
 	private BigInteger p;
 	private BigInteger q;
@@ -43,7 +43,7 @@ public class Rsa {
 	System.out.println("Bytes:"+text);
 	
     StringFunctions h = new StringFunctions();
-    h.splitAscii(rsa.n, text);
+    //h.splitAscii(rsa.n, text);
 	
 	String encoded = rsa.encrypt( text ); 
     System.out.println("Encoded: "+encoded);
@@ -68,16 +68,35 @@ public class Rsa {
 
     
     
-    //rsa.generate_rsa();
+    rsa.generate_rsa();
     //System.out.println(rsa.n);
     }
-  public BigInteger generateN()
-  {
-  	this.n=BigInteger.valueOf(1515);
-  	System.out.println("Generuje klucz");
-  	return n;
-  }
-  public void convertByteArrayToString(BigInteger msg) {
+  
+  public BigInteger getN() {
+	return n;
+}
+
+public BigInteger getD() {
+	return d;
+}
+
+public BigInteger getE() {
+	return e;
+}
+
+public void setN(BigInteger n) {
+	this.n = n;
+}
+
+public void setD(BigInteger d) {
+	this.d = d;
+}
+
+public void setE(BigInteger e) {
+	this.e = e;
+}
+
+public void convertByteArrayToString(BigInteger msg) {
 	  
       
       byte[] byteArray = msg.toByteArray();
@@ -87,8 +106,6 @@ public class Rsa {
       System.out.println(value);
   }
   
-  
-  
   public void generate_rsa()
   {
 	  this.q = this.return_random_prime(this.bitlen); // Losowanie liczyb pierwszej q
@@ -96,8 +113,22 @@ public class Rsa {
 
 	  this.n = q.multiply(p); // n = p*q
 	  
-	 
-	  //this.d = (this.e.pow(-1) ).mod(this.eul);
+	  
+	  MathFunctions mat=new MathFunctions();
+	  this.eul=mat.eulerFunction(p, q);
+	  //System.out.println(eul);
+	  
+	  
+	  this.p=BigInteger.ZERO;
+	  this.q=BigInteger.ZERO;
+	  this.e=new BigInteger("65537");     // common value in practice = 2^16 + 1
+//	  while(!e.gcd(eul).equals(BigInteger.ONE))
+//	  this.e=mat.relativelyPrimeNumbers(eul);
+	  //System.out.println(e);
+
+	  this.d = e.modInverse(eul);
+	  //System.out.println(d);
+	  //System.out.println("koniec");
   }
   
   
