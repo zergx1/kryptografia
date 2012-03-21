@@ -51,7 +51,7 @@ public class Controller extends AbstractAction implements ActionListener {
 				
 				if(window.getKey1().isEmpty() && window.getKey2().isEmpty() && window.getKey3().isEmpty())
 				{
-					blind.generate_rsa();
+					blind.generateRsaKeys();
 					window.setKey1(blind.getN().toString());
 					window.setKey2(blind.getE().toString());
 					window.setKey3(blind.getD().toString());					

@@ -11,6 +11,7 @@ public class StringFunctions {
 		result=new BigInteger(msg.getBytes());
 	     return result;
 	}
+	
 	public String returnByteString (String msg)
 	{
 		BigInteger result;
@@ -18,11 +19,12 @@ public class StringFunctions {
 	     return result.toString();
 	}
 
-	public Vector splitAscii(BigInteger split, String msg)
+	public Vector<BigInteger> splitAscii(BigInteger split, String msg)
 	{
+		System.out.println("Wiadomosc do podzielenia "+msg+" na czesci mniejsze od "+split);
 		int j;
-		msg=this.returnByteString(msg);
-		Vector blocks=new Vector();
+		
+		Vector<BigInteger> blocks=new Vector();
 		for(int i=0;i<msg.length();)
 		{
 			j=i+1;
@@ -43,7 +45,7 @@ public class StringFunctions {
 			}
 			j--;
 			//System.out.println("wziolem od "+i+" do "+j+" "+msg.substring(i, j));
-			blocks.addElement(Integer.valueOf(msg.substring(i, j)));
+			blocks.addElement(new BigInteger((msg.substring(i, j))));
 			i=j;
 			//System.out.println("i= "+i);
 		}
@@ -74,12 +76,51 @@ public class StringFunctions {
 		return blocks;
 	}
 	
-	public void showMeVector(Vector vec)
+	public void showMeVectorNL(Vector vec)
 	{
 
 		for(int i=0;i<vec.size();i++)
 		{
 			System.out.println(vec.elementAt(i));
+		}
+	}
+	public void showMeVector(Vector vec,String space)
+	{
+
+		for(int i=0;i<vec.size();i++)
+		{
+			System.out.print(vec.elementAt(i));
+			if(i!=vec.size()-1)
+				System.out.print(space);
+		}
+		System.out.println();
+	}
+	public void showMeVectorNL(Vector vec, String msg)
+	{
+
+		System.out.println(msg);
+		for(int i=0;i<vec.size();i++)
+		{
+			System.out.println(vec.elementAt(i));
+		}
+	}
+	public void showMeVector(Vector vec,String space, String msg)
+	{
+		System.out.println(msg);
+		for(int i=0;i<vec.size();i++)
+		{
+			System.out.print(vec.elementAt(i));
+			if(i!=vec.size()-1)
+				System.out.print(space);
+		}
+		System.out.println();
+	}
+	public void nl(int n)
+	{
+		while(n!=0)
+		{
+			System.out.println();
+			n--;
 		}
 	}
 }
