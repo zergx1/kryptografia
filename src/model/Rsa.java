@@ -37,7 +37,7 @@ public class Rsa {
     rsa.n = new BigInteger("3233");
     rsa.e =  new BigInteger("17");
     rsa.d =  new BigInteger("2753");
-//    
+//    Szyfrowanie stringu KKK
     String test = "KKK";
     BigInteger text;
     System.out.println(test);
@@ -52,22 +52,24 @@ public class Rsa {
     Vector<BigInteger> zxc = new Vector<BigInteger>(); // to encode
     Vector<String> en = new Vector<String>(); // to decode
     Vector<String> de = new Vector<String>();
-
+    // BYtes of KKK: 4934475  ustawilem recznie bo nie wiedzialem czy dziala Twoja funkcja split
     zxc.add(new BigInteger("493"));
     zxc.add(new BigInteger("447"));
     zxc.add(new BigInteger("5"));
     
     for(int i=0;i<zxc.size();i++)
     {
+    	// WSZYSTKIE CZESCI ZAKODOWANE CZY NIE SA MNIEJSZE OD THIS.N czyli 3233
     	//System.out.println("To encoded: "+zxc.elementAt(i));
-    	System.out.println("Encoded part "+rsa.encrypt(zxc.elementAt(i)));
+    	System.out.println("Encoded part "+rsa.encrypt(zxc.elementAt(i))); // Szyfrowanie po kolei kawalkow 493, 447, 5
     	en.add(rsa.encrypt(zxc.elementAt(i)));
     	//System.out.println("Decoded part: "+rsa.decrypt(new BigInteger(rsa.encrypt(zxc.elementAt(i)))));
-    	de.add(rsa.decrypt(new BigInteger(rsa.encrypt(zxc.elementAt(i)))));
+    	de.add(rsa.decrypt(new BigInteger(rsa.encrypt(zxc.elementAt(i)))));// Odszyfrowanie ich od razu
     }
     System.out.println("ENCODED WITH PARTS: ");
     for(int i=0;i<en.size();i++)
     {
+    	//WYSWIETLENIE WSZYSTKICH ZAKODOWANCYH CZESCI RAZEMA BY ZOBACZYC CALY STRING
     	System.out.print(en.elementAt(i));
 
     }
@@ -76,6 +78,7 @@ public class Rsa {
     String part_de = "";
     for(int i=0;i<en.size();i++)
     {
+    	//TO SAMO TYLKO ABY ZOBACZYC ODKOWANE
     	System.out.print(de.elementAt(i));
     	part_de += de.elementAt(i);
     }
@@ -83,6 +86,9 @@ public class Rsa {
     System.out.println();
     System.out.println("Convert back to text: ");
     rsa.convertByteArrayToString( tmp );
+    //rsa.generate_blind_signature( tmp ); // nie dziala bo najpierw trzeba generate_rsa
+    //PRZYWROCENIE DO TEKSTU po zlaczeniu kawalkow
+    
 
     
 	
