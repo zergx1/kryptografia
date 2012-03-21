@@ -34,16 +34,16 @@ public class Rsa {
 //    //Public Key (N, E)
 //    //Private Key (N, D) 
 //    
-
-    rsa.n = new BigInteger("3233");
-    rsa.e =  new BigInteger("17");
-    rsa.d =  new BigInteger("2753");
-    rsa.r =	new BigInteger("3232");
+    rsa.generateRsaKeys();	//generujemy wszystkie klucze n,e,d,r  
+//    rsa.n = new BigInteger("3233");
+//    rsa.e =  new BigInteger("17");
+//    rsa.d =  new BigInteger("2753");
+//    rsa.r =	new BigInteger("3232");
     
 //    Szyfrowanie stringu KKK
     String test = "KKK";
     System.out.println("Msg" +test);
-//   
+//     
     BigInteger text; 
 	text = new BigInteger( test.getBytes() );
 
@@ -64,7 +64,7 @@ public class Rsa {
 //    zxc.add(new BigInteger("447"));
 //    zxc.add(new BigInteger("5"));
 
-//    rsa.generateRsaKeys();	//generujemy wszystkie klucze n,e,d,r
+
     
 //    for(int i=0;i<zxc.size();i++)
 //    {

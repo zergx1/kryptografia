@@ -29,7 +29,7 @@ public class StringFunctions {
 		{
 			j=i+1;
 			//System.out.println("i= "+i);
-			while(BigInteger.valueOf(Long.valueOf(msg.substring(i, j))).compareTo(split)==-1)
+			while(new BigInteger((msg.substring(i, j))).compareTo(split)==-1)
 			{
 				//System.out.println("j= "+j);
 				if(j+1>msg.length())
