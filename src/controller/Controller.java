@@ -21,6 +21,7 @@ public class Controller extends AbstractAction implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private MainWindow window;
+	private Rsa blind=new Rsa();
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -47,7 +48,7 @@ public class Controller extends AbstractAction implements ActionListener {
 			}
 			if (window.getMethod() == 3) {
 				// RSA
-				Rsa blind=new Rsa();
+				
 				
 				if(window.getKey1().isEmpty() && window.getKey2().isEmpty() && window.getKey3().isEmpty())
 				{
@@ -98,17 +99,23 @@ public class Controller extends AbstractAction implements ActionListener {
 						e1.printStackTrace();
 					}
 			
-				} else {
-					blind.generateRsaKeys();
+				} 
+					if(blind.getD()!=null)
 					window.setOutput( blind.return_encrypted_msg( window.getInput() ));
-					window.setOutput( blind.return_decrypted_msg( window.getOutput() ));
+					else
+					{
+						
+						
+						
+					}
 
 					
 					//Kodowanie
-				}
+				
 
 			}
-		} else {
+		} }else {
+			//System.out.println("TU JESTEM!!!!!");
 			// decrypt
 			if (window.getMethod() == 1) {
 				// DESX
@@ -124,24 +131,40 @@ public class Controller extends AbstractAction implements ActionListener {
 				if (window.getFileOrWindow() == 1) {
 					// File
 					String fileName = window.getFileName();
-				} else {
-					// Window
 				}
 			}
 			if (window.getMethod() == 3) {
-				// Third
-				if (window.getFileOrWindow() == 1) {
-					// File
-					String fileName = window.getFileName();
-				} else {
+				// RSA
+				
+				window.setOutput( blind.return_decrypted_msg( window.getInput() ));
 
-					
-					// Window
+			}
+			else
+			{
+				if(window.getKey1().isEmpty() && window.getKey2().isEmpty() && window.getKey3().isEmpty())
+				{
+					blind.generateRsaKeys();
+					window.setKey1(blind.getN().toString());
+					window.setKey2(blind.getE().toString());
+					window.setKey3(blind.getD().toString());					
 				}
-
+				else
+					{
+					if(window.getKey1().isEmpty() || window.getKey2().isEmpty() || window.getKey3().isEmpty())
+						JOptionPane.showMessageDialog(window,
+							    "Brakuje klucza",
+							    "Blad",
+							    JOptionPane.ERROR_MESSAGE);
+					else
+					{
+						blind.setN(new BigInteger(window.getKey1()));
+						blind.setE(new BigInteger(window.getKey2()));
+						blind.setD(new BigInteger(window.getKey3()));
+					}
+					}
 			}
 		}
-			}
+			
 	}
 
 	public Controller() {

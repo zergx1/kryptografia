@@ -208,6 +208,8 @@ public class Rsa {
   
   public String return_decrypted_msg(String msg1)
   {
+//	  BigInteger text; 
+//		text = new BigInteger( msg1.getBytes() );
 	    StringFunctions h = new StringFunctions();
 
 	    Vector<BigInteger> zxc2= h.splitAscii(this.n,msg1);
