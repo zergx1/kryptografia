@@ -99,7 +99,10 @@ public class Controller extends AbstractAction implements ActionListener {
 					}
 			
 				} else {
-					// Window
+					blind.generateRsaKeys();
+					window.setOutput( blind.return_encrypted_msg( window.getInput() ));
+					window.setOutput( blind.return_decrypted_msg( window.getOutput() ));
+
 					
 					//Kodowanie
 				}
@@ -131,6 +134,8 @@ public class Controller extends AbstractAction implements ActionListener {
 					// File
 					String fileName = window.getFileName();
 				} else {
+
+					
 					// Window
 				}
 

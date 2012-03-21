@@ -41,7 +41,7 @@ public class Rsa {
 //    rsa.r =	new BigInteger("3232");
     
 //    Szyfrowanie stringu KKK
-    String test = "KKK";
+    String test = "KKKzxcc";
     System.out.println("Msg" +test);
 //     
     BigInteger text; 
@@ -164,6 +164,63 @@ public class Rsa {
 //    //System.out.println(rsa.n);
     }
   
+  public String return_encrypted_msg(String msg)
+  {
+//	     
+	    BigInteger text; 
+		text = new BigInteger( msg.getBytes() );
+
+		//System.out.println("Bytes:"+text);
+	    StringFunctions h = new StringFunctions();
+	    Vector<BigInteger> zxc=h.splitAscii(this.n, text.toString());
+	    
+	    Vector<BigInteger> bl = new Vector<BigInteger>(); 	// zaciemnione
+	    Vector<BigInteger> si = new Vector<BigInteger>();	//podpisane
+	    Vector<BigInteger> ubl = new Vector<BigInteger>();	//odciemnione
+	    System.out.println("Blinded values");
+	    for(int i=0;i<zxc.size();i++)
+	    {
+	    	bl.add(this.generateBlinded(zxc.elementAt(i)));
+	    	System.out.println(zxc.elementAt(i)+" -> "+bl.elementAt(i));
+	    }
+	    System.out.println("Signed values");
+	    for(int i=0;i<bl.size();i++)
+	    {
+	    	si.add(this.generateSignedValue(bl.elementAt(i)));
+	    	System.out.print(bl.elementAt(i)+" -> "+si.elementAt(i));
+	    	ubl.add(this.generateUnBlinded(si.elementAt(i)));
+	    	System.out.println(" check "+this.checkBlindSignature(ubl.elementAt(i), zxc.elementAt(i)));
+	    	
+	    }
+	    h.nl(1);
+	    h.showMeVector(ubl,"","ZASZYFROWANA WIADOMOSC");
+	    String encrypted = "";
+		for(int i=0;i<ubl.size();i++)
+		{
+			encrypted += (ubl.elementAt(i));
+
+		}
+		
+	    
+	  return encrypted;
+	  
+  }
+  
+  public String return_decrypted_msg(String msg1)
+  {
+	    StringFunctions h = new StringFunctions();
+
+	    Vector<BigInteger> zxc2= h.splitAscii(this.n,msg1);
+	    Vector<BigInteger> msg=new Vector<BigInteger> ();
+	    h.showMeVectorNL(zxc2);
+	    for(int i=0;i<zxc2.size();i++)
+	    {
+	    	msg.add(this.generateMsg(zxc2.elementAt(i)));
+	    }
+	    h.showMeVector(msg, " ", "Odkodowane");
+	    return this.returnConvertByteArrayToString(new BigInteger(h.vectorToString(msg)));
+  }
+  
   public BigInteger getN() {
 	return n;
 }
@@ -197,6 +254,15 @@ public void setE(BigInteger e) {
       
       System.out.println(value);
   }
+	public String returnConvertByteArrayToString(BigInteger msg) {
+		  
+	      
+	      byte[] byteArray = msg.toByteArray();
+	      
+	      String value = new String(byteArray);
+	      
+	      return value;
+	  }
   
   public void generateRsaKeys()
   {
