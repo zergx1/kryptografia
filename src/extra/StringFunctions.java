@@ -115,6 +115,15 @@ public class StringFunctions {
 		}
 		System.out.println();
 	}
+	public String vectorToString(Vector vec)
+	{
+		String result="";
+		for(int i=0;i<vec.size();i++)
+		{
+			result+=vec.elementAt(i);
+		}
+		return result;
+	}
 	public void nl(int n)
 	{
 		while(n!=0)

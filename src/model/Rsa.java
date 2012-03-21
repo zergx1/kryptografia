@@ -88,14 +88,22 @@ public class Rsa {
     for(int i=0;i<bl.size();i++)
     {
     	si.add(rsa.generateSignedValue(bl.elementAt(i)));
-    	System.out.println(bl.elementAt(i)+" -> "+si.elementAt(i));
+    	System.out.print(bl.elementAt(i)+" -> "+si.elementAt(i));
     	ubl.add(rsa.generateUnBlinded(si.elementAt(i)));
-    	System.out.print(" check "+rsa.checkBlindSignature(ubl.elementAt(i), zxc.elementAt(i)));
+    	System.out.println(" check "+rsa.checkBlindSignature(ubl.elementAt(i), zxc.elementAt(i)));
     	
     }
     h.nl(1);
-    h.showMeVector(si,"","ZASZYFROWANA WIADOMOSC");
-
+    h.showMeVector(ubl,"","ZASZYFROWANA WIADOMOSC");
+    Vector<BigInteger> zxc2=h.splitAscii(rsa.n,h.vectorToString(ubl));
+    Vector<BigInteger> msg=new Vector<BigInteger> ();
+    h.showMeVectorNL(zxc2);
+    for(int i=0;i<zxc2.size();i++)
+    {
+    	msg.add(rsa.generateMsg(zxc2.elementAt(i)));
+    }
+    h.showMeVector(msg, " ", "Odkodowane");
+    rsa.convertByteArrayToString(new BigInteger(h.vectorToString(msg)));
     
 //    System.out.println("ENCODED WITH PARTS: ");
 //    for(int i=0;i<en.size();i++)
@@ -248,13 +256,22 @@ public void setE(BigInteger e) {
 	  return this.r.modInverse(n).multiply(signature).mod(n);
   }
   
+  public BigInteger generateMsg(BigInteger signature)
+  {
+	  
+     BigInteger check = signature.modPow(this.e,this.n);    //try to verify using the RSA formula
+    //System.out.print("signature "+signature+" check= "+check);
+return check;
+
+  }
+  
   public boolean checkBlindSignature(BigInteger signature,BigInteger msg)
   {
 	
     BigInteger sig_of_m = msg.modPow(this.d,this.n);    //check that unblinded is equal to a signature of m:
      BigInteger check = signature.modPow(this.e,this.n);    //try to verify using the RSA formula
     
-
+//System.out.print("signature= "+signature+" check= "+check);
     if(signature.equals(sig_of_m) && msg.equals(check))
     	return true;
     else
