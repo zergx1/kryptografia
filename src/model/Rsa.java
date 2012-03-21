@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.Vector;
 
 import extra.MathFunctions;
 import extra.StringFunctions;
@@ -33,32 +34,69 @@ public class Rsa {
 //    //Public Key (N, E) = (2951147, 13)
 //    //Private Key (N, D) = (2951147, 1133677)
 //    
-//    rsa.n = new BigInteger("3233");
-//    rsa.e =  new BigInteger("17");
-//    rsa.d =  new BigInteger("2753");
+    rsa.n = new BigInteger("3233");
+    rsa.e =  new BigInteger("17");
+    rsa.d =  new BigInteger("2753");
 //    
-//    String test = "KKKk";
-//    BigInteger text;
-//    System.out.println(test);
+    String test = "KKK";
+    BigInteger text;
+    System.out.println(test);
 //    
-//	text = new BigInteger( test.getBytes() );
-//	//text = new BigInteger("493");
-//	System.out.println("Bytes:"+text);
-//	
-//    StringFunctions h = new StringFunctions();
-//    h.splitAscii(rsa.n, text.toString());
-//	
-//	String encoded = rsa.encrypt( text ); 
-//    System.out.println("Encoded: "+encoded);
-//
-//    
-//    String decoded = rsa.decrypt(new BigInteger(encoded));
-//    System.out.println("Decoded: "+decoded);
+	text = new BigInteger( test.getBytes() );
+	//text = new BigInteger("493");
+	System.out.println("Bytes:"+text);
+	
+    StringFunctions h = new StringFunctions();
+    
+    h.splitAscii(rsa.n, text.toString());
+    Vector<BigInteger> zxc = new Vector<BigInteger>(); // to encode
+    Vector<String> en = new Vector<String>(); // to decode
+    Vector<String> de = new Vector<String>();
+
+    zxc.add(new BigInteger("493"));
+    zxc.add(new BigInteger("447"));
+    zxc.add(new BigInteger("5"));
+    
+    for(int i=0;i<zxc.size();i++)
+    {
+    	//System.out.println("To encoded: "+zxc.elementAt(i));
+    	System.out.println("Encoded part "+rsa.encrypt(zxc.elementAt(i)));
+    	en.add(rsa.encrypt(zxc.elementAt(i)));
+    	//System.out.println("Decoded part: "+rsa.decrypt(new BigInteger(rsa.encrypt(zxc.elementAt(i)))));
+    	de.add(rsa.decrypt(new BigInteger(rsa.encrypt(zxc.elementAt(i)))));
+    }
+    System.out.println("ENCODED WITH PARTS: ");
+    for(int i=0;i<en.size();i++)
+    {
+    	System.out.print(en.elementAt(i));
+
+    }
+    System.out.println();
+    System.out.println("Decoded WITH PARTS: ");
+    String part_de = "";
+    for(int i=0;i<en.size();i++)
+    {
+    	System.out.print(de.elementAt(i));
+    	part_de += de.elementAt(i);
+    }
+    BigInteger tmp = new BigInteger(part_de);
+    System.out.println();
+    System.out.println("Convert back to text: ");
+    rsa.convertByteArrayToString( tmp );
+
+    
+	
+	String encoded = rsa.encrypt( text ); 
+    System.out.println("Encoded: "+encoded);
+
+    
+    String decoded = rsa.decrypt(new BigInteger(encoded));
+    System.out.println("Decoded: "+decoded);
     
 
     
     
-    //rsa.convertByteArrayToString( text );
+    rsa.convertByteArrayToString( text );
 
 	//BigInteger h = new BigInteger( test.getBytes() ).toString();
 
@@ -69,15 +107,15 @@ public class Rsa {
     System.out.println(decrypted);*/
 	//System.out.println(rsa.encrypt(new BigInteger("910")));
 
-    String test = "Xfdsddasdasdasdasda89765458790087965465rtgyhbnjuy7utfgvbhysdgdfgddgd";
-    BigInteger raw;
-	raw =  new BigInteger( test.getBytes() );
-	System.out.println(raw);
+    //String test = "Xfdsddasdasdasdasda89765458790087965465rtgyhbnjuy7utfgvbhysdgdfgddgd";
+    //BigInteger raw;
+	//raw =  new BigInteger( test.getBytes() );
+	//System.out.println(raw);
     
     
     
-    rsa.generate_rsa();
-    rsa.generate_blind_signature(new BigInteger("7575757575"));
+    //rsa.generate_rsa();
+    //rsa.generate_blind_signature(new BigInteger("7575757575"));
     //System.out.println(rsa.n);
     }
   
@@ -165,14 +203,14 @@ public void convertByteArrayToString(BigInteger msg) {
          BigInteger unblinded = this.r.modInverse(n).multiply(signature).mod(n);
          //SIGNATURE OF MSG
          BigInteger sig_of_m = msg.modPow(this.d,this.n);
-         //System.out.println("signature_of_m = " + sig_of_m);
+         System.out.println("signature_of_m = " + sig_of_m);
          
          //check that unblinded is equal to a signature of m:
-         //System.out.println(unblinded.equals(sig_of_m));
+         System.out.println(unblinded.equals(sig_of_m));
          
          //try to verify using the RSA formula
          BigInteger check = unblinded.modPow(this.e,this.n);
-         //System.out.println(msg.equals(check));
+         System.out.println(msg.equals(check));
       
      }
 
