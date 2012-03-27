@@ -55,9 +55,14 @@ public class Rsa {
 		System.out.println("File bytes:"+bigby);
 		by = bigby.toByteArray();
         File someFile = new File("test.txt");
+        String en = rsa.return_encrypted_msg( by );
+        en = rsa.return_decrypted_msg(en);
+        
+        
+        
         FileOutputStream fos = new FileOutputStream(someFile);
         try {
-			fos.write(by);
+			fos.write(en.getBytes());
 	        fos.flush();
 	        fos.close();
 		} catch (IOException e) {
@@ -206,6 +211,57 @@ public class Rsa {
 //	     
 	    BigInteger text; 
 		text = new BigInteger( msg.getBytes() ); // Przerobienie tekstu na bajty
+
+		//System.out.println("Bytes:"+text);
+	    StringFunctions h = new StringFunctions();// Inicjalizacja Funckji stringa
+	    /*
+	     * Podzeielnie kodu numerycznego (z textu) na czesci mniejsze od n
+	     * Czyli jezeli n jest rowne 323 a kod to 3214587123
+	     * zostanie to podzielone nastepujaco
+	     * 321 | 45 | 87 | 123
+	     */
+	    Vector<BigInteger> zxc=h.splitAscii(this.n, text.toString());// 
+	    
+	    Vector<BigInteger> bl = new Vector<BigInteger>(); 	// zaciemnione
+	    Vector<BigInteger> si = new Vector<BigInteger>();	//podpisane
+	    Vector<BigInteger> ubl = new Vector<BigInteger>();	//odciemnione
+	    System.out.println("Blinded values");
+	    for(int i=0;i<zxc.size();i++)
+	    {
+	    	// Zaciemnainie poszczegolonych fragmentow
+	    	bl.add(this.generateBlinded(zxc.elementAt(i)));
+	    	System.out.println(zxc.elementAt(i)+" -> "+bl.elementAt(i));
+	    }
+	    System.out.println("Signed values");
+	    for(int i=0;i<bl.size();i++)
+	    {
+	    	// Podpisywanie poszczegolnych fragmentow
+	    	si.add(this.generateSignedValue(bl.elementAt(i)));
+	    	System.out.print(bl.elementAt(i)+" -> "+si.elementAt(i));
+	    	ubl.add(this.generateUnBlinded(si.elementAt(i)));
+	    	System.out.println(" check "+this.checkBlindSignature(ubl.elementAt(i), zxc.elementAt(i)));
+	    	
+	    }
+	    h.nl(1);
+	    h.showMeVector(ubl,"","ZASZYFROWANA WIADOMOSC");
+	    String encrypted = "";
+		for(int i=0;i<ubl.size();i++)
+		{
+			// Laczenie wszystkiego w calosc
+			encrypted += (ubl.elementAt(i));
+
+		}
+		
+	    //Zwrocenei zaszyfrowanej + podpisanej wiadomosci
+	  return encrypted;
+	  
+  }
+  
+  public String return_encrypted_msg(byte[] msg)
+  {
+//	     
+	    BigInteger text; 
+		text = new BigInteger( msg ); // Przerobienie tekstu na bajty
 
 		//System.out.println("Bytes:"+text);
 	    StringFunctions h = new StringFunctions();// Inicjalizacja Funckji stringa
