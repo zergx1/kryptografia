@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -17,14 +18,14 @@ import extra.StringFunctions;
 public class Rsa {
 	// KLUCZ PUBLICZNY DEFINIOWANY JEST JAKO PARA LICZB (n, e)
 	// KLUCZ PRYWATNY DEFINIOWANY JEST JAKO PARA LICZB (n, d)
-	private int bitlen = 1024;
+	private int bitlen = 1024; // Dlugosc do losowania kluczy
 	private BigInteger n; // n=p*q
 	private BigInteger p;
 	private BigInteger q;
 	private BigInteger d; // odwrotnosc e mod eul
 	private BigInteger eul; //  eulera(n)
 	private BigInteger e;
-	private BigInteger r;
+	private BigInteger r; // losowa liczba r wzglednie pierwsza potrzebna do tworzenia slepych sygnatur
 	
 
 	
@@ -163,16 +164,25 @@ public class Rsa {
 //    //rsa.generate_blind_signature(new BigInteger("7575757575"));
 //    //System.out.println(rsa.n);
     }
-  
+  /*
+   * Funckja zwraca zakodowona wiadomosc w RSA + Blind singature
+   * 
+   */
   public String return_encrypted_msg(String msg)
   {
 //	     
 	    BigInteger text; 
-		text = new BigInteger( msg.getBytes() );
+		text = new BigInteger( msg.getBytes() ); // Przerobienie tekstu na bajty
 
 		//System.out.println("Bytes:"+text);
-	    StringFunctions h = new StringFunctions();
-	    Vector<BigInteger> zxc=h.splitAscii(this.n, text.toString());
+	    StringFunctions h = new StringFunctions();// Inicjalizacja Funckji stringa
+	    /*
+	     * Podzeielnie kodu numerycznego (z textu) na czesci mniejsze od n
+	     * Czyli jezeli n jest rowne 323 a kod to 3214587123
+	     * zostanie to podzielone nastepujaco
+	     * 321 | 45 | 87 | 123
+	     */
+	    Vector<BigInteger> zxc=h.splitAscii(this.n, text.toString());// 
 	    
 	    Vector<BigInteger> bl = new Vector<BigInteger>(); 	// zaciemnione
 	    Vector<BigInteger> si = new Vector<BigInteger>();	//podpisane
@@ -180,12 +190,14 @@ public class Rsa {
 	    System.out.println("Blinded values");
 	    for(int i=0;i<zxc.size();i++)
 	    {
+	    	// Zaciemnainie poszczegolonych fragmentow
 	    	bl.add(this.generateBlinded(zxc.elementAt(i)));
 	    	System.out.println(zxc.elementAt(i)+" -> "+bl.elementAt(i));
 	    }
 	    System.out.println("Signed values");
 	    for(int i=0;i<bl.size();i++)
 	    {
+	    	// Podpisywanie poszczegolnych fragmentow
 	    	si.add(this.generateSignedValue(bl.elementAt(i)));
 	    	System.out.print(bl.elementAt(i)+" -> "+si.elementAt(i));
 	    	ubl.add(this.generateUnBlinded(si.elementAt(i)));
@@ -197,11 +209,12 @@ public class Rsa {
 	    String encrypted = "";
 		for(int i=0;i<ubl.size();i++)
 		{
+			// Laczenie wszystkiego w calosc
 			encrypted += (ubl.elementAt(i));
 
 		}
 		
-	    
+	    //Zwrocenei zaszyfrowanej + podpisanej wiadomosci
 	  return encrypted;
 	  
   }
@@ -212,14 +225,17 @@ public class Rsa {
 //		text = new BigInteger( msg1.getBytes() );
 	    StringFunctions h = new StringFunctions();
 
+	    //PODZIELENIE TEKSTU JAK W TO BYLO OPISANE W ENCRYPTED_MSG WYZEJ
 	    Vector<BigInteger> zxc2= h.splitAscii(this.n,msg1);
 	    Vector<BigInteger> msg=new Vector<BigInteger> ();
 	    h.showMeVectorNL(zxc2);
 	    for(int i=0;i<zxc2.size();i++)
 	    {
+	    	//weryfikowanie poszczegolonych czesci
 	    	msg.add(this.generateMsg(zxc2.elementAt(i)));
 	    }
 	    h.showMeVector(msg, " ", "Odkodowane");
+	    //Odwrocenie kodu numerycznego do Stringa
 	    return this.returnConvertByteArrayToString(new BigInteger(h.vectorToString(msg)));
   }
   
@@ -247,7 +263,7 @@ public void setE(BigInteger e) {
 	this.e = e;
 }
 
-	public void convertByteArrayToString(BigInteger msg) {
+public void convertByteArrayToString(BigInteger msg) {
 	  
       
       byte[] byteArray = msg.toByteArray();
@@ -274,13 +290,13 @@ public void setE(BigInteger e) {
 	  this.n = q.multiply(p); // n = p*q
 	  
 	  MathFunctions mat=new MathFunctions();
-	  this.eul=mat.eulerFunction(p, q);  
+	  this.eul=mat.eulerFunction(p, q);  // obliczenie funkcji eulera
 	  
 	  this.p=BigInteger.ZERO;
 	  this.q=BigInteger.ZERO;
-	  this.e=mat.relativelyPrimeNumbers(eul);    
+	  this.e=mat.relativelyPrimeNumbers(eul);   // liczba e | 0 < e < eul | Wzgelednie pierwsza z eul
 	  this.d = e.modInverse(eul);
-	  this.r=mat.relativelyPrimeNumbers(n);
+	  this.r=mat.relativelyPrimeNumbers(n); // Liczba losowa wzgeldnie pierwsza z n
 
   }
   
@@ -290,7 +306,7 @@ public void setE(BigInteger e) {
 	   * Funkjca zwraca losowa liczbe pierwsza o podanej dlugosci bitow
 	   */
 	  Random prng = new SecureRandom();
-	  return BigInteger.probablePrime(bitlength/2, prng);
+	  return BigInteger.probablePrime(bitlength, prng);
 	  
   }
   
@@ -300,7 +316,7 @@ public void setE(BigInteger e) {
   }
   
   public String decrypt(BigInteger msg) {
-      return new String(msg.modPow(this.d, this.n).toString() );
+      return new String(msg.modPow(this.d, this.n).toString() );// text ^ d mod n
   }
 
   public BigInteger generateBlinded(BigInteger msg)
@@ -329,7 +345,7 @@ public void setE(BigInteger e) {
 	  
      BigInteger check = signature.modPow(this.e,this.n);    //try to verify using the RSA formula
     //System.out.print("signature "+signature+" check= "+check);
-return check;
+     return check;
 
   }
   
