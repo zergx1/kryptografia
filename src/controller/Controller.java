@@ -99,7 +99,7 @@ public class Controller extends AbstractAction implements ActionListener {
 		
 		
 		if (e.getActionCommand().equals("EN")) {
-			System.out.println("ENCRYPTED");
+			//System.out.println("ENCRYPTED");
 					if(window.getKey1().isEmpty() || window.getKey2().isEmpty() || window.getKey3().isEmpty())
 					{
 						JOptionPane.showMessageDialog(window,
@@ -118,6 +118,15 @@ public class Controller extends AbstractAction implements ActionListener {
 					if(winIn==true)
 					{
 						//z pola tekstowego
+						if(window.getInput().isEmpty())
+						{
+							JOptionPane.showMessageDialog(window,
+								    "Puste pole",
+								    "Blad",
+								    JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+							
 						if(winOut==true)
 						{
 							//do pola tekstowego
@@ -150,10 +159,10 @@ public class Controller extends AbstractAction implements ActionListener {
 						//z pliku
 						try {
 							byte[] by = blind.fileToBytes(window.getFileIn());
-							System.out.println(window.getFileIn());
+							//System.out.println(window.getFileIn());
 							try
 							{
-								System.out.println("Z pliku encrypt");
+								//System.out.println("Z pliku encrypt");
 								BigInteger bigby = new BigInteger( by );
 								by = bigby.toByteArray();
 							    String en = blind.return_encrypted_msg( by );
@@ -199,7 +208,7 @@ public class Controller extends AbstractAction implements ActionListener {
 		
 		if(e.getActionCommand().equals("DE"))
 		{
-			System.out.println("DECRYPTED");
+			//System.out.println("DECRYPTED");
 			if(window.getKey1().isEmpty() || window.getKey2().isEmpty() || window.getKey3().isEmpty())
 			{
 						JOptionPane.showMessageDialog(window,
@@ -218,6 +227,14 @@ public class Controller extends AbstractAction implements ActionListener {
 		
 				if(winIn==true)
 				{
+					if(window.getInput().isEmpty())
+					{
+						JOptionPane.showMessageDialog(window,
+							    "Puste pole",
+							    "Blad",
+							    JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					//z pola tekstowego
 					if(winOut==true)
 					{
@@ -251,7 +268,7 @@ public class Controller extends AbstractAction implements ActionListener {
 					//z pliku
 					try {
 						//byte[] by = blind.fileToBytes(window.getFileIn());
-						System.out.println(window.getFileIn());
+						//System.out.println(window.getFileIn());
 						FileReader fr = new FileReader(window.getFileIn());
 						BufferedReader br = new BufferedReader(fr);
 						String s,en="";
@@ -265,20 +282,20 @@ public class Controller extends AbstractAction implements ActionListener {
 							//fr.close();
 							try
 							{
-								System.out.println("ENCRYPTED z pliku");
+								//System.out.println("ENCRYPTED z pliku");
 								//BigInteger bigby = new BigInteger( by );
 								//by = bigby.toByteArray();
 							    en=blind.return_decrypted_msg(en);
 								if(winOut==true)
 								{
 								//do pola tekstowego
-									System.out.println("Z pliku na konsole");
+									//System.out.println("Z pliku na konsole");
 								window.setOutput(en);
 								}
 								else
 								{
 									//do pliku
-									System.out.println("Z pliku do pliku");
+									//System.out.println("Z pliku do pliku");
 							        FileOutputStream fos = new FileOutputStream(window.getFileOut());
 							        try {
 										fos.write(en.getBytes());
@@ -302,10 +319,10 @@ public class Controller extends AbstractAction implements ActionListener {
 							//z pliku
 							try {
 								byte[] by = blind.fileToBytes(window.getFileIn());
-								System.out.println(window.getFileIn());
+								//System.out.println(window.getFileIn());
 								try
 								{
-									System.out.println("Z pliku encrypt");
+									//System.out.println("Z pliku encrypt");
 									BigInteger bigby = new BigInteger( by );
 
 								    en = blind.return_decrypted_msg( bigby.toString() );
