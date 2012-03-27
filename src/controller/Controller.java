@@ -106,13 +106,13 @@ public class Controller extends AbstractAction implements ActionListener {
 		
 			
 	}
-
+s
 	public Controller() {
 		window = new MainWindow();
 		window.setAll();
 		window.repaint();
-
-		//window.setController(this);
+		window.setController(this);
+		
 	}
 
 }
