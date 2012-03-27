@@ -1,6 +1,11 @@
 package model;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +45,34 @@ public class Rsa {
 //    rsa.e =  new BigInteger("17");
 //    rsa.d =  new BigInteger("2753");
 //    rsa.r =	new BigInteger("3232");
+    
+    File plik = new File("D://Projekty//Java//krypto//kryptografia//dane.txt");
+    try {
+    	
+		byte[] by = rsa.fileToBytes(plik);
+		BigInteger bigby = new BigInteger( by );
+
+		System.out.println("File bytes:"+bigby);
+		by = bigby.toByteArray();
+        File someFile = new File("test.txt");
+        FileOutputStream fos = new FileOutputStream(someFile);
+        try {
+			fos.write(by);
+	        fos.flush();
+	        fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
+		
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
     
 //    Szyfrowanie stringu KKK
     String test = "KKKzxcc";
@@ -361,6 +394,27 @@ public void convertByteArrayToString(BigInteger msg) {
     else
     	return false;
 
+  }
+  
+  public byte[] fileToBytes(File file) throws FileNotFoundException
+  {
+      
+      FileInputStream fis = new FileInputStream(file);
+      //System.out.println(file.exists() + "!!");
+      //InputStream in = resource.openStream();
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      byte[] buf = new byte[1024];
+      try {
+          for (int readNum; (readNum = fis.read(buf)) != -1;) {
+              bos.write(buf, 0, readNum); //no doubt here is 0
+              //Writes len bytes from the specified byte array starting at offset off to this byte array output stream.
+              System.out.println("read " + readNum + " bytes,");
+          }
+      } catch (IOException ex) {
+    	  System.out.println("Errror!");
+      }
+      byte[] bytes = bos.toByteArray();
+      return bytes;
   }
 
 //  public void generate_blind_signature(BigInteger msg)
